@@ -1,0 +1,859 @@
+:root {
+	--main-bg: rgb(199, 195, 167);
+	/* This is the base color, others are just hues / opacity derivatives */
+	--text-color: rgb(59, 58, 50, 1.0);
+	--unfocused-color: rgb(177, 174, 150);
+	--flash-color: rgb(118, 116, 100);
+	--menu-bg: rgb(207, 204, 171);
+	--animation-delay: 0.1s;
+	--animation-duration: 0.25s;
+	--global-spacing: calc(var(--pico-spacing));
+	--lowest-height: 30rem;
+}
+
+.text-hack {
+	top: 0%;
+	left: 0%;
+	position: absolute;
+	width: 0%;
+	height: 0%;
+	color: transparent;
+	background: transparent;
+	background-color: transparent;
+}
+
+/* Semantics */
+
+.tab-content {
+	display: none;
+}
+
+* {
+	color: var(--text-color);
+}
+
+html {
+	background-color: var(--main-bg);
+}
+
+body {
+	min-height: var(--lowest-height);
+	display: flex;
+	flex-flow: column;
+	height: 100vh;
+}
+
+@keyframes showcontent-anim {
+	0% {
+		opacity: 0%;
+	}
+
+	100% {
+		opacity: 100%;
+	}
+}
+
+.content {
+	height: 100%;
+	overflow: hidden;
+	padding-bottom: var(--global-spacing);
+	width: 100%;
+	opacity: 0%;
+	animation: showcontent-anim var(--animation-duration) calc(var(--animation-delay) * 2) linear forwards;
+}
+
+.list-contents>.status-entry {
+	padding-left: calc(var(--global-spacing) * 0.5);
+	padding-right: calc(var(--global-spacing) * 0.5);
+}
+
+.list-contents input {
+	max-width: 10rem;
+}
+
+.big-list-box {
+	grid-template-columns: none !important;
+}
+
+.big-list {
+	width: 100% !important;
+}
+
+.list-contents {
+	background-color: var(--main-bg);
+	margin: 0px;
+	margin-left: var(--global-spacing);
+	z-index: 99;
+	overflow: auto;
+	align-self: center;
+	width: fit-content;
+	max-width: 50%;
+	max-height: 40%;
+	position: fixed;
+	display: grid;
+	grid-auto-flow: row;
+	pointer-events: none;
+	opacity: 0%;
+	transition: var(--animation-duration);
+}
+
+.list-contents>li {
+	list-style: none;
+}
+
+.list-contents>.hoverable {
+	background: linear-gradient(to right,
+			transparent 0%,
+			transparent 50%,
+			var(--text-color) 0%,
+			var(--text-color) 50%);
+	background-size: 200% 200%;
+}
+
+.selectable.selected:focus-within .list-contents {
+	pointer-events: all;
+	opacity: 100%;
+}
+
+.tab-title {
+	letter-spacing: -0.1rem;
+	animation: showletters-anim var(--animation-duration) calc(var(--animation-delay)) linear forwards;
+	font-size: xx-large;
+}
+
+@keyframes showletters-anim {
+	0% {
+		letter-spacing: -1em;
+	}
+
+	100% {
+		letter-spacing: -0.1rem;
+	}
+}
+
+.tab-title-letter {
+	text-shadow: 0.2rem 0.2rem var(--unfocused-color);
+}
+
+.status-box {
+	width: max-content;
+	overflow: auto;
+	justify-self: end;
+	background-color: var(--menu-bg);
+	display: flex !important;
+	flex-flow: column;
+}
+
+.status-content {
+	display: grid;
+	grid-auto-flow: row;
+	grid-template-rows: max-content;
+	background-color: var(--menu-bg);
+	padding-left: calc(var(--global-spacing) * 0.5);
+	padding-right: calc(var(--global-spacing) * 0.5);
+	height: 100%;
+}
+
+.status-category {
+	border-bottom: 2px var(--unfocused-color) solid;
+}
+
+.status-entry{
+	align-items: center;
+	padding-top: calc(var(--global-spacing) * 0.325);
+	padding-bottom: calc(var(--global-spacing) * 0.325);
+	display: grid;
+	grid-auto-flow: column;
+	column-gap: calc(var(--global-spacing) * 2);
+	grid-template-columns: max-content;
+	justify-content: space-between;
+}
+
+.status-header {
+	padding-bottom: calc(var(--global-spacing) * 0.25);
+	padding-top: calc(var(--global-spacing) * 0.25);
+	background-color: var(--text-color);
+	color: var(--main-bg) !important;
+	height: fit-content;
+	width: 100%;
+	padding-left: calc(var(--global-spacing) * 0.5);
+	padding-right: calc(var(--global-spacing) * 0.5);
+}
+
+.column-box {
+	grid-auto-flow: column !important;
+	column-gap: var(--global-spacing);
+	overflow-x: auto;
+}
+
+.decorated-content-box {
+	height: 100%;
+	display: grid;
+	grid-auto-flow: row;
+	grid-template-columns: max-content;
+	margin-right: var(--global-spacing);
+}
+
+.visible-content:has(#soundToggle:hover, #soundToggle:focus) .helpbar::after {
+	opacity: 100%;
+	content: "Toggle sound effects off.";
+}
+
+.visible-content:has(.hoverable:hover #songsListContents, .hoverable:focus #songsListContents) .helpbar::after {
+	opacity: 100%;
+	content: "Play a song.";
+}
+
+body:has([data-tab-id="quests_tab"]:hover, [data-tab-id="quests_tab"]:focus) .visible-content .helpbar::after {
+	opacity: 100%;
+	content: "Confirm quest details and objectives.";
+}
+
+body:has([data-tab-id="items_tab"]:hover, [data-tab-id="items_tab"]:focus) .visible-content .helpbar::after {
+	opacity: 100%;
+	content: "View or use items in your inventory.";
+}
+
+body:has([data-tab-id="weapons_tab"]:hover, [data-tab-id="weapons_tab"]:focus) .visible-content .helpbar::after {
+	opacity: 100%;
+	content: "Change equipped weapons.";
+}
+
+body:has([data-tab-id="skills_tab"]:hover, [data-tab-id="skills_tab"]:focus) .visible-content .helpbar::after {
+	opacity: 100%;
+	content: "Assign special abilities.";
+}
+
+body:has([data-tab-id="intel_tab"]:hover, [data-tab-id="intel_tab"]:focus) .visible-content .helpbar::after {
+	opacity: 100%;
+	content: "View various types of acquired data.";
+}
+
+body:has([data-tab-id="system_tab"]:hover, [data-tab-id="system_tab"]:focus) .visible-content .helpbar::after {
+	opacity: 100%;
+	content: "Load game, save game, or change system settings.";
+}
+
+.visible-content {
+	grid-template-rows: max-content 60% max-content;
+	align-content: space-between;
+	row-gap: var(--global-spacing);
+	display: grid;
+	grid-auto-flow: row;
+	height: 100%;
+}
+
+@keyframes showhoverable-anim {
+	0% {
+		opacity: 0%;
+		right: var(--global-spacing);
+	}
+
+	100% {
+		opacity: 100%;
+		right: 0%;
+	}
+}
+
+.decorated-content {
+	width: fit-content;
+	max-height: 100%;
+	height: fit-content;
+	align-self: center;
+	overflow: auto;
+	display: grid;
+	grid-auto-flow: column;
+	grid-template-columns: repeat(auto-fit, minmax(0, max-content));
+}
+
+.decorated-content::before {
+	margin-right: var(--global-spacing) !important;
+	margin-top: calc(var(--global-spacing) * 0.5) !important;
+	margin-bottom: calc(var(--global-spacing) * 0.5) !important;
+}
+
+.decorated-content .hoverable {
+	margin-top: calc(var(--global-spacing) * 0.5) !important;
+	margin-bottom: calc(var(--global-spacing) * 0.5) !important;
+}
+
+input {
+	background-color: var(--unfocused-color) !important;
+	outline: none !important;
+	border: none !important;
+	margin: 0px !important;
+	padding: calc(var(--global-spacing) * 0.25) !important;
+	border-radius: 0px !important;
+	position: relative !important;
+	color: var(--text-color) !important;
+}
+
+input:not([type=checkbox]) {
+	height: fit-content !important;
+	width: fit-content !important;
+}
+
+.hoverable:has(>input) {
+	width: fit-content;
+	padding: 0px !important;
+}
+
+.status-entry .hoverable:has(input) {
+	margin: 0px !important;
+}
+
+@keyframes showhelpbar-anim {
+	0% {
+		opacity: 0%;
+		top: 10%;
+	}
+
+	100% {
+		opacity: 100%;
+		top: 0%;
+	}
+}
+
+.helpbar {
+	grid-auto-flow: column;
+	grid-template-columns: max-content;
+	position: relative;
+	min-height: 3rem;
+	align-self: end;
+	width: 100%;
+	display: grid;
+	background-color: var(--menu-bg);
+	animation: showhelpbar-anim var(--animation-duration) calc(var(--animation-delay)) linear forwards;
+}
+
+.helpbar::after {
+	opacity: 0%;
+	align-self: center;
+	padding-left: var(--global-spacing);
+	transition: var(--animation-duration);
+	content: "";
+}
+
+.helpbar.dec-margin::before {
+	margin: 0px !important;
+	background:
+		linear-gradient(to right,
+			var(--text-color) 0%,
+			var(--text-color) 55%,
+			transparent 0%,
+			transparent 85%,
+			var(--text-color) 0%,
+			var(--text-color) 15%);
+}
+
+.helpbar,
+input {
+	box-shadow: 2px 2px 4px 0px gray;
+}
+
+.container-fluid {
+	padding-left: calc(var(--global-spacing) * 1.5);
+	padding-right: calc(var(--global-spacing) * 1.5);
+}
+
+header {
+	min-height: fit-content;
+	padding-right: 0px !important;
+	padding-top: 0px !important;
+	padding-bottom: 0px !important;
+	display: grid;
+	grid-template-columns: max-content;
+	grid-auto-flow: column;
+}
+
+@keyframes showheader-content-anim {
+	0% {
+		opacity: 0%;
+		clip-path: inset(0% 100% 0% 0%);
+	}
+
+	100% {
+		opacity: 100%;
+		clip-path: inset(0% 0% 0% 0%);
+	}
+}
+
+.header-content {
+	overflow: auto;
+	padding-right: calc(var(--global-spacing) * 1.5);
+	display: grid;
+	grid-auto-flow: column;
+	column-gap: calc(var(--global-spacing) * 1.75);
+	opacity: 0%;
+	animation: showheader-content-anim var(--animation-duration) calc(var(--animation-delay) * 2) linear forwards;
+}
+
+.icon {
+	pointer-events: none;
+	margin-left: 4px;
+	margin-right: 4px;
+	height: 1rem;
+	width: 1rem;
+	transition: var(--animation-duration);
+}
+
+/* https://github.com/Kndgy/NieR-Automata-Design-System */
+
+.hoverable {
+	position: relative;
+	display: grid;
+	grid-auto-flow: column;
+	grid-template-columns: max-content max-content;
+	align-items: center;
+	justify-items: start;
+	color: var(--text-color) !important;
+	height: fit-content;
+	border-radius: 0px;
+	padding: 0.1rem;
+	margin: 0px;
+	margin-top: var(--global-spacing) !important;
+	margin-bottom: var(--global-spacing) !important;
+	background: linear-gradient(to right,
+			var(--unfocused-color) 0%,
+			var(--unfocused-color) 50%,
+			var(--text-color) 0%,
+			var(--text-color) 50%);
+	background-size: 200% 200%;
+	outline: none;
+	border: none;
+	box-shadow: none;
+	transition: var(--animation-duration);
+	background-color: var(--flash-color);
+}
+
+.hoverable-content {
+	pointer-events: none;
+	transition: var(--animation-duration);
+	padding-right: calc(var(--global-spacing) * 0.5);
+}
+
+.hoverable>.icon {
+	background-color: var(--text-color);
+}
+
+@keyframes flashing-anim {
+	0% {
+		background-color: currentColor;
+	}
+
+	25% {
+		background-color: currentColor;
+	}
+
+	50% {
+		background-color: currentColor;
+	}
+
+	75% {
+		background-color: currentColor;
+	}
+
+	100% {
+		background-size: 0px;
+	}
+}
+
+@keyframes selected-anim {
+	0% {
+		background: currentColor;
+	}
+
+	100% {
+		background: var(--flash-color);
+	}
+}
+
+.selected {
+	animation: selected-anim calc(var(--animation-duration)) linear forwards;
+}
+
+.hoverable:not(.selected, .active):hover,
+.hoverable:not(.selected, .active):focus-within {
+	animation: flashing-anim 1s calc(var(--animation-delay) * 2) linear infinite alternate;
+	background-position: -100% -100%;
+}
+
+.hoverable:not(.selected, .active):hover>.icon,
+.hoverable:not(.selected, .active):focus-within>.icon,
+.selected>.icon,
+.tab-button.active>.icon {
+	background-color: var(--main-bg);
+}
+
+.hoverable:not(.selected, .active, .tab-button):hover,
+.hoverable:not(.selected, .active, .tab-button):focus-within {
+	box-shadow: 2px 2px 0px 0px gray;
+}
+
+.hoverable:not(.selected, .active):hover>.hoverable-content,
+.hoverable:not(.selected, .active):focus-within>.hoverable-content,
+.selected>.hoverable-content,
+.tab-button.active>.hoverable-content {
+	color: var(--main-bg) !important;
+}
+
+.expandable::before,
+.expandable::after {
+	opacity: 0%;
+	pointer-events: none;
+	content: "";
+	display: inline-block;
+	height: 2px;
+	width: 100%;
+	z-index: -1;
+	position: absolute;
+	background-color: var(--text-color);
+	transition: var(--animation-duration);
+}
+
+.expandable::before {
+	top: 0%;
+}
+
+.expandable::after {
+	top: 100%;
+}
+
+.expandable:not(.selected, .active):hover::before,
+.expandable:not(.selected, .active):focus-within::before {
+	opacity: 100%;
+	top: -15%;
+}
+
+.expandable:not(.selected, .active):hover::after,
+.expandable:not(.selected, .active):focus-within::after {
+	opacity: 100%;
+	top: 115%;
+}
+
+.tab-button.active {
+	animation: flashing-anim 1s calc(var(--animation-delay) * 2) linear infinite alternate;
+	background-position: -100% -100%;
+	border-bottom: var(--global-spacing) transparent solid !important;
+	margin-bottom: 0px !important;
+}
+
+@keyframes showseparator-anim {
+	0% {
+		clip-path: inset(0% 0% 0% 100%);
+	}
+
+	100% {
+		clip-path: inset(0% 0% 0% 0%);
+	}
+}
+
+.separator {
+	min-height: fit-content;
+	/* The overflow was hidden, but it was still changing the page size */
+	overflow: hidden;
+	clip-path: inset(0% 0% 0% 100%);
+	margin: 0px;
+	border-top: 2px var(--text-color) solid;
+	padding-bottom: var(--global-spacing);
+	animation: showseparator-anim var(--animation-duration) linear forwards;
+}
+
+.separator-background {
+	column-gap: 8px;
+	display: grid;
+	grid-auto-flow: column;
+	height: 24px;
+}
+
+.dec-square {
+	height: 4px;
+	width: 8px;
+	background-color: var(--text-color);
+}
+
+.dec-circles {
+	margin-top: 6px;
+	background:
+		radial-gradient(var(--text-color) 0%,
+			var(--text-color) 55%,
+			transparent 0%,
+			transparent 100%),
+		radial-gradient(var(--text-color) 0%,
+			var(--text-color) 55%,
+			transparent 0%,
+			transparent 100%),
+		radial-gradient(var(--text-color) 0%,
+			var(--text-color) 55%,
+			transparent 0%,
+			transparent 100%);
+	height: 16px;
+	width: 16px;
+	background-repeat: no-repeat, no-repeat, no-repeat;
+	background-position: 0px 0px, 10px 0px, 5px 8px;
+	background-size: 6px 6px, 6px 6px, 6px 6px;
+}
+
+.dec-margin::before,
+.decorated-content::before {
+	content: "";
+	width: 18px;
+	margin-top: var(--global-spacing);
+	margin-bottom: var(--global-spacing);
+	margin-right: -18px;
+	background:
+		linear-gradient(to right,
+			var(--unfocused-color) 0%,
+			var(--unfocused-color) 55%,
+			transparent 0%,
+			transparent 85%,
+			var(--unfocused-color) 0%,
+			var(--unfocused-color) 15%);
+	background-repeat: no-repeat;
+}
+
+@keyframes showheader-dec-anim {
+	0% {
+		clip-path: inset(100%);
+	}
+
+	100% {
+		clip-path: inset(0%);
+	}
+}
+
+header.dec-margin::before {
+	animation: showheader-dec-anim var(--animation-duration) linear forwards;
+}
+
+@keyframes showcontent-dec-anim {
+	0% {
+		clip-path: inset(100% 0% 100% 0%);
+	}
+
+	100% {
+		clip-path: inset(0% 0% 0% 0%);
+	}
+}
+
+.decorated-content::before {
+	animation: showcontent-dec-anim var(--animation-duration) calc(var(--animation-delay)) linear forwards;
+}
+
+.dec-selectable,
+.dec-selectable-squares {
+	pointer-events: none;
+	padding-top: calc(var(--global-spacing) - (0.5rem * 0.5));
+	padding-bottom: calc(var(--global-spacing) - (0.5rem * 0.5));
+	opacity: 0%;
+	align-self: center;
+	position: absolute;
+	height: calc(0.7rem * 3);
+	width: 1.25rem;
+	max-width: none;
+	left: -1.5rem;
+	transition: var(--animation-duration);
+}
+
+.dec-selectable {
+	/* https://codepen.io/sosuke/pen/Pjoqqp */
+	filter: invert(19%) sepia(8%) saturate(758%) hue-rotate(16deg) brightness(95%) contrast(87%);
+}
+
+.dec-selectable-squares {
+	background:
+		linear-gradient(var(--text-color), var(--text-color)),
+		linear-gradient(var(--text-color), var(--text-color));
+	background-repeat: no-repeat, no-repeat;
+	background-position: 100% 75%, 100% 25%;
+	background-size: 0.15rem 0.15rem, 0.15rem 0.15rem;
+}
+
+.hoverable:not(.selected, .active):hover>.dec-selectable,
+.hoverable:not(.selected, .active):focus-within>.dec-selectable,
+.hoverable:not(.selected, .active):hover>.dec-selectable-squares,
+.hoverable:not(.selected, .active):focus-within>.dec-selectable-squares,
+.selected>.dec-selectable-squares,
+.active>.dec-selectable-squares {
+	opacity: 100%;
+}
+
+.selected>.dec-selectable,
+.active>.dec-selectable {
+	opacity: 50%;
+	filter: invert(88%) sepia(9%) saturate(582%) hue-rotate(9deg) brightness(110%) contrast(85%);
+}
+
+/*
+	TODO : Each background component is actually animated
+*/
+
+.bg {
+	min-height: var(--lowest-height);
+	pointer-events: none;
+	position: fixed;
+	height: 100%;
+	width: 100%;
+}
+
+@keyframes bganim {
+	0% {
+		transform: translate(0px, 0px);
+	}
+
+	100% {
+		transform: translate(0.5rem, 1rem);
+	}
+}
+
+@keyframes bganim-rot {
+	0% {
+		transform: rotate(180deg) translate(0px, 0px);
+	}
+
+	100% {
+		transform: rotate(180deg) translate(0.5rem, 1rem);
+	}
+}
+
+.bg-rot {
+	pointer-events: none;
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	transform: rotate(180deg);
+}
+
+.animated-bg {
+	animation: bganim 15s linear infinite alternate-reverse;
+}
+
+.animated-bg-rot {
+	animation: bganim-rot 15s linear infinite alternate-reverse;
+}
+
+.overlay {
+	opacity: 10%;
+	background:
+		linear-gradient(transparent, transparent 90%, gray 10%, gray),
+		linear-gradient(90deg, transparent, transparent 90%, gray 10%, gray);
+	background-size: 5px 5px;
+}
+
+@keyframes showanim-circle {
+	0% {
+		opacity: 0%;
+		clip-path: inset(0% 0% 100% 0%);
+	}
+
+	100% {
+		opacity: 50%;
+		clip-path: inset(0% 0% 0% 0%);
+	}
+}
+
+@keyframes showanim {
+	0% {
+		opacity: 0%;
+		clip-path: inset(0% 0% 100% 0%);
+	}
+
+	100% {
+		opacity: 20%;
+		clip-path: inset(0% 0% 0% 0%);
+	}
+}
+
+/*
+	Offset by radius
+*/
+
+.circle1 {
+	opacity: 0%;
+	top: -15rem;
+	left: -15rem;
+	border: gray 1px solid;
+	border-radius: 50%;
+	height: 30rem;
+	width: 30rem;
+	animation: showanim-circle var(--animation-duration) var(--animation-delay) linear forwards;
+}
+
+.circle2 {
+	opacity: 0%;
+	top: -15.5rem;
+	left: -15.5rem;
+	border: gray 1px solid;
+	border-radius: 50%;
+	height: 31rem;
+	width: 31rem;
+	animation: showanim-circle var(--animation-duration) linear forwards;
+}
+
+/*
+	Height difference is 4rem
+	If an offset is needed, take into account both top and left offsets
+	Always compare with the biggest line
+*/
+
+.line1 {
+	opacity: 0%;
+	top: -20rem;
+	left: 9rem;
+	transform: rotate(-45deg);
+	height: 52rem;
+	width: 0.1rem;
+	background-color: gray;
+	animation: showanim var(--animation-duration) linear forwards;
+}
+
+/*
+	Height is 2 * biggest diameter
+	Offset is the biggest diameter
+*/
+
+.line2 {
+	opacity: 0%;
+	top: -21rem;
+	left: 10rem;
+	transform: rotate(-45deg);
+	height: 62rem;
+	width: 0.1rem;
+	background-color: gray;
+	animation: showanim var(--animation-duration) var(--animation-delay) linear forwards;
+}
+
+.line3 {
+	opacity: 0%;
+	top: -19rem;
+	left: 7rem;
+	transform: rotate(-45deg);
+	height: 58rem;
+	width: 0.1rem;
+	background-color: gray;
+	animation: showanim var(--animation-duration) calc(var(--animation-delay) * 2) linear forwards;
+}
+
+/* Can't mirror? */
+
+.line4 {
+	opacity: 0%;
+	top: -21rem;
+	left: 11rem;
+	transform: rotate(-45deg);
+	height: 58rem;
+	width: 0.1rem;
+	background-color: gray;
+	animation: showanim var(--animation-duration) linear forwards;
+}
+
+.line5 {
+	opacity: 0%;
+	top: -17rem;
+	left: 6rem;
+	transform: rotate(-45deg);
+	height: 52rem;
+	width: 0.1rem;
+	background-color: gray;
+	animation: showanim var(--animation-duration) calc(var(--animation-delay) * 2) linear forwards;
+}

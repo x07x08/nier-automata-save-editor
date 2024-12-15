@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+	<title>NieR : Automata Save Editor</title>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=0.8">
+	<meta name="description" content="A NieR : Automata save editor" />
+	<link rel="icon" type="image/x-icon" href="favicon.ico">
+
+	<link rel="stylesheet" href="../external/picocss/pico.css">
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<datalist id="chipsList"></datalist>
+	<datalist id="inventoryList"></datalist>
+
+	<div class="bg" style="contain: layout;">
+		<span class="text-hack">Speeds up page loading</span>
+
+		<div class="bg animated-bg">
+			<div class="bg circle1"></div>
+			<div class="bg circle2"></div>
+			<div class="bg line1"></div>
+			<div class="bg line2"></div>
+			<div class="bg line3"></div>
+		</div>
+
+		<div class="bg-rot animated-bg-rot">
+			<div class="bg circle1"></div>
+			<div class="bg circle2"></div>
+			<div class="bg line4"></div>
+			<div class="bg line2"></div>
+			<div class="bg line5"></div>
+		</div>
+	</div>
+
+	<header class="container-fluid dec-margin">
+		<div class="header-content">
+			<button class="tab-button hoverable expandable" data-tab-id="quests_tab" data-content-id="main_content"
+				style="margin-left: calc(var(--global-spacing) * 2)">
+				<span class="icon"></span>
+
+				<span class="hoverable-content">QUESTS</span>
+			</button>
+
+			<button class="tab-button hoverable expandable" data-tab-id="items_tab" data-content-id="main_content">
+				<span class="icon"></span>
+
+				<span class="hoverable-content">ITEMS</span>
+			</button>
+
+			<button class="tab-button hoverable expandable" data-tab-id="weapons_tab" data-content-id="main_content">
+				<span class="icon"></span>
+
+				<span class="hoverable-content">WEAPONS</span>
+			</button>
+
+			<button class="tab-button hoverable expandable" data-tab-id="skills_tab" data-content-id="main_content">
+				<span class="icon"></span>
+
+				<span class="hoverable-content">SKILLS</span>
+			</button>
+
+			<button class="tab-button hoverable expandable" data-tab-id="intel_tab" data-content-id="main_content">
+				<span class="icon"></span>
+
+				<span class="hoverable-content">INTEL</span>
+			</button>
+
+			<button class="tab-button hoverable expandable active" data-tab-id="system_tab"
+				data-content-id="main_content">
+				<span class="icon"></span>
+
+				<span class="hoverable-content">SYSTEM</span>
+			</button>
+		</div>
+	</header>
+
+	<div class="container-fluid separator">
+		<div class="separator-background">
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+		</div>
+	</div>
+
+	<div class="content container-fluid" id="main_content">
+		<div class="tab-content" id="quests_tab" style="height: 100%;">
+			<div class="visible-content">
+				<span class="tab-title">
+					<span class="tab-title-letter">Q</span>
+					<span class="tab-title-letter">U</span>
+					<span class="tab-title-letter">E</span>
+					<span class="tab-title-letter">S</span>
+					<span class="tab-title-letter">T</span>
+					<span class="tab-title-letter">S</span>
+				</span>
+
+				<div class="decorated-content-box column-box big-list-box">
+					<div class="decorated-content big-list">
+						<div id="quests_tab_content" class="decorated-content-box">
+							NO INTERFACE
+						</div>
+					</div>
+				</div>
+
+				<div class="helpbar dec-margin"></div>
+			</div>
+		</div>
+
+		<div class="tab-content" id="items_tab" style="height: 100%;">
+			<div class="visible-content">
+				<span class="tab-title">
+					<span class="tab-title-letter">I</span>
+					<span class="tab-title-letter">T</span>
+					<span class="tab-title-letter">E</span>
+					<span class="tab-title-letter">M</span>
+					<span class="tab-title-letter">S</span>
+				</span>
+
+				<div class="decorated-content-box column-box big-list-box">
+					<div class="decorated-content big-list">
+						<div id="items_tab_content" class="decorated-content-box">
+							NO DATA
+						</div>
+					</div>
+				</div>
+
+				<div class="helpbar dec-margin"></div>
+			</div>
+		</div>
+
+		<div class="tab-content" id="weapons_tab" style="height: 100%;">
+			<div class="visible-content">
+				<span class="tab-title">
+					<span class="tab-title-letter">W</span>
+					<span class="tab-title-letter">E</span>
+					<span class="tab-title-letter">A</span>
+					<span class="tab-title-letter">P</span>
+					<span class="tab-title-letter">O</span>
+					<span class="tab-title-letter">N</span>
+					<span class="tab-title-letter">S</span>
+				</span>
+
+				<div class="decorated-content-box column-box big-list-box">
+					<div class="decorated-content big-list">
+						<div id="weapons_tab_content" class="decorated-content-box">
+							NO DATA
+						</div>
+					</div>
+				</div>
+
+				<div class="helpbar dec-margin"></div>
+			</div>
+		</div>
+
+		<div class="tab-content" id="skills_tab" style="height: 100%;">
+			<div class="visible-content">
+				<span class="tab-title">
+					<span class="tab-title-letter">S</span>
+					<span class="tab-title-letter">K</span>
+					<span class="tab-title-letter">I</span>
+					<span class="tab-title-letter">L</span>
+					<span class="tab-title-letter">L</span>
+					<span class="tab-title-letter">S</span>
+				</span>
+
+				<div class="decorated-content-box column-box">
+					<div class="decorated-content">
+						<div class="decorated-content-box">
+							<button class="hoverable expandable selectable" data-tab-id="pod_programs_tab"
+								data-content-id="skills_tab_content" data-group-id="skillsTab">
+								<span class="icon"></span>
+
+								<span class="hoverable-content">Pod Programs</span>
+							</button>
+
+							<button class="hoverable expandable selectable" data-tab-id="chips_tab"
+								data-content-id="skills_tab_content" data-group-id="skillsTab">
+								<span class="icon"></span>
+
+								<span class="hoverable-content">Plug-in Chips</span>
+							</button>
+						</div>
+					</div>
+
+					<div class="content" id="skills_tab_content" style="padding: 0px !important;">
+						<div class="tab-content" style="height: 100%;" id="pod_programs_tab">
+							<div class="decorated-content-box column-box big-list-box">
+								<div class="decorated-content big-list">
+									<div class="decorated-content-box">
+										NO INTERFACE
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="tab-content" style="height: 100%;" id="chips_tab">
+							<div class="decorated-content-box column-box big-list-box">
+								<div class="decorated-content big-list">
+									<div id="chips_tab_content" class="decorated-content-box">
+										NO DATA
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="helpbar dec-margin"></div>
+			</div>
+		</div>
+
+		<div class="tab-content" id="intel_tab" style="height: 100%;">
+			<div class="visible-content">
+				<span class="tab-title">
+					<span class="tab-title-letter">I</span>
+					<span class="tab-title-letter">N</span>
+					<span class="tab-title-letter">T</span>
+					<span class="tab-title-letter">E</span>
+					<span class="tab-title-letter">L</span>
+				</span>
+
+				<div class="decorated-content-box column-box">
+					<div class="decorated-content">
+						<div class="decorated-content-box">
+							NO INTERFACE
+						</div>
+					</div>
+				</div>
+
+				<div class="helpbar dec-margin"></div>
+			</div>
+		</div>
+
+		<div class="tab-content" id="system_tab" style="height: 100%;">
+			<div class="visible-content">
+				<span class="tab-title">
+					<span class="tab-title-letter">S</span>
+					<span class="tab-title-letter">Y</span>
+					<span class="tab-title-letter">S</span>
+					<span class="tab-title-letter">T</span>
+					<span class="tab-title-letter">E</span>
+					<span class="tab-title-letter">M</span>
+				</span>
+
+				<div class="decorated-content-box column-box">
+					<div class="decorated-content">
+						<div class="decorated-content-box">
+							<input type="file" style="display: none;" id="realSaveButton"></input>
+
+							<button class="hoverable expandable" id="loadSaveButton">
+								<span class="icon"></span>
+
+								<span class="hoverable-content">Load</span>
+							</button>
+
+							<button class="hoverable expandable" id="updateSaveButton">
+								<span class="icon"></span>
+
+								<span class="hoverable-content">Save</span>
+							</button>
+
+							<button class="hoverable selectable expandable">
+								<span class="icon"></span>
+
+								<span class="hoverable-content">Songs list</span>
+
+								<div class="list-contents" id="songsListContents"></div>
+							</button>
+
+							<button class="hoverable selectable expandable" id="soundToggle">
+								<span class="icon"></span>
+
+								<span class="hoverable-content">Toggle sounds</span>
+							</button>
+						</div>
+					</div>
+
+					<div class="status-box">
+						<div class="status-header">
+							Status
+						</div>
+
+						<div class="status-content">
+							<div style="height: fit-content;">
+								<div class="status-entry status-category">
+									<span id="statusCharacter">NO DATA</span>
+									<span id="statusLevel" style="justify-self: end;">NO DATA</span>
+								</div>
+
+								<div class="status-entry">
+									<span>Funds (G):</span>
+									<div class="hoverable" style="justify-self: end;">
+										<input id="statusFunds" type="number"></input>
+									</div>
+								</div>
+
+								<div class="status-entry status-category">
+									<span>EXP:</span>
+									<div class="hoverable" style="justify-self: end;">
+										<input id="statusExperience" type="number"></input>
+									</div>
+								</div>
+							</div>
+
+							<div class="status-entry" style="justify-content: center;">
+								<div id="statusError">NO DATA</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="helpbar dec-margin"></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid separator" style="transform: scaleX(-1);">
+		<div class="separator-background">
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+			<span class="dec-circles"></span>
+			<span class="dec-square"></span>
+		</div>
+	</div>
+
+	<div class="bg overlay"></div>
+
+	<script src="script.js"></script>
+</body>
+
+</html>
