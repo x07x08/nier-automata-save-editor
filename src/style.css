@@ -694,6 +694,7 @@ header.dec-margin::before {
 	position: fixed;
 	height: 100%;
 	width: 100%;
+	z-index: -1;
 }
 
 @keyframes bganim {
@@ -738,6 +739,7 @@ header.dec-margin::before {
 		linear-gradient(transparent, transparent 90%, gray 10%, gray),
 		linear-gradient(90deg, transparent, transparent 90%, gray 10%, gray);
 	background-size: 5px 5px;
+	z-index: 0;
 }
 
 @keyframes showanim-circle {
