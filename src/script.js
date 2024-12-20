@@ -1491,7 +1491,9 @@ function updateContent(tab, isSelectable = false) {
 		child.innerText = child.initialText;
 	}
 
-	for (const _tab of tabsList) {
+	const _tabsList = document.querySelectorAll("[data-content-id]");
+
+	for (const _tab of _tabsList) {
 		if (_tab.dataset.contentId != tab.dataset.contentId) continue;
 
 		_tab.classList.toggle("active", false);
