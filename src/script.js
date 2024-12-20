@@ -1549,20 +1549,22 @@ function updateContent(tab, isSelectable = false) {
 	content.classList.add("content");
 }
 
+function tabClickHandler(event) {
+	const isSelectable = this.classList.contains("selectable");
+
+	if (this.classList.contains("active") && !isSelectable) return;
+
+	if (!isSelectable) playSound(SELECT_SOUND);
+
+	updateContent(this, isSelectable);
+}
+
 for (const tab of tabsList) {
 	if (tab.classList.contains("active")) {
 		updateContent(tab);
 	}
 
-	tab.addEventListener("click", function (event) {
-		const isSelectable = tab.classList.contains("selectable");
-
-		if (this.classList.contains("active") && !isSelectable) return;
-
-		if (!isSelectable) playSound(SELECT_SOUND);
-
-		updateContent(this, isSelectable);
-	});
+	tab.addEventListener("click", tabClickHandler);
 }
 
 soundToggleButton.addEventListener("click", function (event) {
