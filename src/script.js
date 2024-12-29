@@ -807,9 +807,12 @@ function updateChip(chip) {
 	const knownChip = knownChipsList[chip.type.value];
 
 	if (knownChip) {
+		chip.baseCode.value = knownChip.baseCode;
+		chip.baseId.value = knownChip.baseId;
+
 		if (knownChip.hasLevels) {
-			chip.baseCode.value = knownChip.baseCode + chip.level.value;
-			chip.baseId.value = knownChip.baseId + chip.level.value;
+			chip.baseCode.value += chip.level.value;
+			chip.baseId.value += chip.level.value;
 		} else {
 			chip.level.value = 0;
 		}
