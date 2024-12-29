@@ -815,6 +815,10 @@ function updateChip(chip) {
 				chip.level.value = 0;
 			}
 
+			if (chip.level.value > 8) {
+				chip.level.value = 8;
+			}
+
 			chip.baseCode.value += chip.level.value;
 			chip.baseId.value += chip.level.value;
 		} else {
@@ -879,7 +883,7 @@ function Chip() {
 
 				buttonText.innerText = mainObj.name;
 
-				mainObj.level.update();
+				BasicUpdate(mainObj.level);
 			};
 
 			retElem = ItemListElement("Lv :", "number");
