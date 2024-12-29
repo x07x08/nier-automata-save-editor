@@ -811,6 +811,10 @@ function updateChip(chip) {
 		chip.baseId.value = knownChip.baseId;
 
 		if (knownChip.hasLevels) {
+			if (chip.level.value < 0) {
+				chip.level.value = 0;
+			}
+
 			chip.baseCode.value += chip.level.value;
 			chip.baseId.value += chip.level.value;
 		} else {
@@ -874,6 +878,8 @@ function Chip() {
 				if ((val == null) || (val == undefined)) return;
 
 				buttonText.innerText = mainObj.name;
+
+				mainObj.level.update();
 			};
 
 			retElem = ItemListElement("Lv :", "number");
@@ -949,7 +955,6 @@ function Chip() {
 			this.elem = buttonElem;
 
 			this.type.update();
-			this.level.update();
 			this.weight.update();
 			this.slotA.update();
 			this.slotB.update();
