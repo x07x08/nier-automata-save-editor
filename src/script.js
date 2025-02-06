@@ -395,10 +395,12 @@ function Item() {
 			this.quantity.elem.addEventListener("change", BasicChange);
 
 			const buttonElem = crel("button", { class: "hoverable selectable expandable" });
+			//buttonElem.dataset.groupId = "itemsList";
 
 			initHoverable(buttonElem);
 
-			crel(buttonElem, buttonText, listContents);
+			crel(buttonElem, buttonText);
+			initList(buttonElem, undefined, listContents);
 
 			initSelectable(buttonElem, true);
 
@@ -732,10 +734,12 @@ function Weapon(defaultId) {
 			this.newStory.elem.addEventListener("change", CheckboxChange);
 
 			const buttonElem = crel("button", { class: "hoverable selectable expandable" });
+			//buttonElem.dataset.groupId = "weaponsList";
 
 			initHoverable(buttonElem);
 
-			crel(buttonElem, buttonText, listContents);
+			crel(buttonElem, buttonText);
+			initList(buttonElem, undefined, listContents);
 
 			initSelectable(buttonElem, true);
 
@@ -949,10 +953,12 @@ function Chip() {
 			this.baseCode.elem.addEventListener("change", BasicChange);
 
 			const buttonElem = crel("button", { class: "hoverable selectable expandable" });
+			//buttonElem.dataset.groupId = "chipsList";
 
 			initHoverable(buttonElem);
 
-			crel(buttonElem, buttonText, listContents);
+			crel(buttonElem, buttonText);
+			initList(buttonElem, undefined, listContents);
 
 			initSelectable(buttonElem, true);
 
@@ -1240,14 +1246,15 @@ let soundToggle = true;
 
 const HOVER_SOUND = "../external/sounds/hover.ogg";
 const SELECT_SOUND = "../external/sounds/select.ogg";
-const songsListContents = document.getElementById("songsListContents");
 
 const letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",];
 
 /** @param {HTMLElement} parent */
 
 function fixList(parent) {
-	const list = parent.querySelector(".list-contents");
+	if (!parent._custom || !parent._custom.list) return;
+
+	const list = parent._custom.list.active;
 
 	if (!list) return;
 
@@ -1289,6 +1296,73 @@ function fixList(parent) {
 	list.style.top = `${(resTop)}px`;
 }
 
+function showList(list) {
+	list.style.opacity = 100;
+	list.style.pointerEvents = "all";
+}
+
+function hideList(list) {
+	list.style.opacity = 0;
+	list.style.pointerEvents = "none";
+}
+
+function clearList(elem) {
+	if (!elem._custom || !elem._custom.list) return;
+
+	let currentList = elem._custom.list.active;
+
+	if (!currentList) return;
+
+	elem._custom.list.active = null;
+
+	hideList(currentList);
+
+	currentList.addEventListener("transitionend", endTransition);
+}
+
+function makeList(elem) {
+	if (!elem._custom || !elem._custom.list) return;
+
+	let list = undefined;
+
+	if (elem._custom.list.makeFunc) {
+		list = crel("div", {
+			class: "list-contents",
+		});
+
+		elem._custom.list.makeFunc(list);
+	} else if (elem._custom.list.existingList) {
+		list = elem._custom.list.existingList;
+	}
+
+	elem._custom.list.active = list;
+
+	crel(document.querySelector("#main_content>:not(.tab-content) .visible-content"), elem._custom.list.active);
+
+	list.offsetWidth;
+
+	showList(list);
+}
+
+function endTransition(event) {
+	this.remove();
+
+	this.removeEventListener("transitionend", endTransition);
+}
+
+function initList(elem, makeFunc = undefined, existingList = undefined) {
+	elem._custom = {};
+	elem._custom.list = {};
+
+	if (makeFunc) {
+		elem._custom.list.makeFunc = makeFunc;
+	}
+
+	if (existingList) {
+		elem._custom.list.existingList = existingList;
+	}
+}
+
 function BgSong(name = "", title = "") {
 	return {
 		__proto__: BgSong.prototype,
@@ -1305,7 +1379,7 @@ function BgSong(name = "", title = "") {
 			const content = crel("span", { class: "hoverable-content" });
 			content.innerText = song.title;
 
-			song.elem = crel("li", {
+			song.elem = crel("button", {
 				class: "hoverable expandable selectable",
 				tabindex: "0",
 				"data-group-id": "songsList",
@@ -1321,7 +1395,10 @@ function BgSong(name = "", title = "") {
 				}
 			});
 
-			crel(songsListContents, crel(song.elem, content));
+			initHoverable(song.elem);
+			initSelectable(song.elem, true);
+
+			crel(song.elem, content);
 		},
 
 		init() {
@@ -1354,6 +1431,14 @@ const songsList = [
 for (const song of songsList) {
 	song.init();
 }
+
+const songsListButton = document.getElementById("songsList");
+
+initList(songsListButton, function (list) {
+	for (const song of songsList) {
+		crel(list, song.elem);
+	}
+});
 
 const selectablesList = document.querySelectorAll(".selectable");
 const tabsList = document.querySelectorAll("[data-content-id]");
@@ -1436,34 +1521,61 @@ for (const hoverable of hoverablesList) {
 	initHoverable(hoverable);
 }
 
+function toggleSelectable(selectable, force = undefined) {
+	if (selectable.dataset.groupId) {
+		const others = document.querySelectorAll(`[data-group-id=${selectable.dataset.groupId}]`);
+
+		for (const _item of others) {
+			if (_item == selectable) continue;
+
+			_item.classList.toggle("selected", false);
+			clearList(_item);
+		}
+	}
+
+	if (selectable.classList.toggle("selected", force)) {
+		makeList(selectable);
+
+		fixList(selectable);
+	} else {
+		clearList(selectable);
+	}
+}
+
 function initSelectable(selectable, force = false) {
-	if (!force &&
-		((selectable.classList.contains("tab-button")) ||
-			(selectable.parentElement.classList.contains("list-contents")))) {
+	if (!force && ((selectable.classList.contains("tab-button")))) {
 		return;
 	}
 
 	selectable.addEventListener("click", function (event) {
-		// For some reason the list items cannot be clicked / activated via keyboard
 		if (!event.target.classList.contains("selectable")) return;
-
-		fixList(event.target);
 
 		playSound(SELECT_SOUND);
 
-		if (event.target.dataset.groupId) {
-			const others = document.querySelectorAll(`[data-group-id=${event.target.dataset.groupId}]`);
-
-			for (const _item of others) {
-				if (_item == event.target) continue;
-
-				_item.classList.toggle("selected", false);
-			}
-		}
-
-		event.target.classList.toggle("selected");
+		toggleSelectable(event.target);
 	});
 }
+
+window.addEventListener("click", function (event) {
+	const targets = event.composedPath();
+
+	for (const target of targets) {
+		if (!target.classList) continue;
+
+		if (target.classList.contains("hoverable") || target.classList.contains("list-contents")) {
+			return;
+		}
+	}
+
+	const elems = document.querySelector("#main_content>:not(.tab-content) .visible-content").querySelectorAll(".selectable");
+
+	for (const elem of elems) {
+		if (!elem._custom || !elem._custom.list) continue;
+
+		elem.classList.remove("selected");
+		clearList(elem);
+	}
+});
 
 for (const selectable of selectablesList) {
 	initSelectable(selectable);

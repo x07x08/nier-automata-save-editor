@@ -97,7 +97,8 @@ body {
 	transition: var(--animation-duration);
 }
 
-.list-contents>li {
+.list-contents>li,
+.list-contents>button {
 	list-style: none;
 }
 
@@ -108,11 +109,6 @@ body {
 			var(--text-color) 0%,
 			var(--text-color) 50%);
 	background-size: 200% 200%;
-}
-
-.selectable.selected:focus-within .list-contents {
-	pointer-events: all;
-	opacity: 100%;
 }
 
 .tab-title {
@@ -199,7 +195,7 @@ body {
 	content: "Toggle sound effects off.";
 }
 
-.visible-content:has(.hoverable:hover #songsListContents, .hoverable:focus #songsListContents) .helpbar::after {
+.visible-content:has(#songsList:hover, #songsList:focus) .helpbar::after {
 	opacity: 100%;
 	content: "Play a song.";
 }
@@ -272,7 +268,9 @@ body:has([data-tab-id="system_tab"]:hover, [data-tab-id="system_tab"]:focus) .vi
 	margin-bottom: calc(var(--global-spacing) * 0.5) !important;
 }
 
-.decorated-content .hoverable {
+.decorated-content .hoverable,
+.list-contents>li,
+.list-contents>button {
 	margin-top: calc(var(--global-spacing) * 0.5) !important;
 	margin-bottom: calc(var(--global-spacing) * 0.5) !important;
 }
@@ -467,7 +465,7 @@ header {
 	}
 }
 
-.selected {
+.selectable.selected {
 	animation: selected-anim calc(var(--animation-duration)) linear forwards;
 }
 
@@ -702,6 +700,10 @@ header.dec-margin::before {
 		transform: translate(0px, 0px);
 	}
 
+	50% {
+		transform: translate(-0.25rem, -0.5rem);
+	}
+
 	100% {
 		transform: translate(0.5rem, 1rem);
 	}
@@ -712,6 +714,10 @@ header.dec-margin::before {
 		transform: rotate(180deg) translate(0px, 0px);
 	}
 
+	50% {
+		transform: rotate(180deg) translate(-0.25rem, -0.5rem);
+	}
+	
 	100% {
 		transform: rotate(180deg) translate(0.5rem, 1rem);
 	}
@@ -726,11 +732,11 @@ header.dec-margin::before {
 }
 
 .animated-bg {
-	animation: bganim 15s linear infinite alternate-reverse;
+	animation: bganim 15s ease infinite alternate-reverse;
 }
 
 .animated-bg-rot {
-	animation: bganim-rot 15s linear infinite alternate-reverse;
+	animation: bganim-rot 15s ease infinite alternate-reverse;
 }
 
 .overlay {
