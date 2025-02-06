@@ -1567,7 +1567,7 @@ window.addEventListener("click", function (event) {
 		}
 	}
 
-	const elems = document.querySelector("#main_content>:not(.tab-content) .visible-content").querySelectorAll(".selectable");
+	const elems = document.querySelector("#main_content>:not(.tab-content) .visible-content").querySelectorAll(".selected");
 
 	for (const elem of elems) {
 		if (!elem._custom || !elem._custom.list) continue;

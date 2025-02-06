@@ -717,7 +717,7 @@ header.dec-margin::before {
 	50% {
 		transform: rotate(180deg) translate(-0.25rem, -0.5rem);
 	}
-	
+
 	100% {
 		transform: rotate(180deg) translate(0.5rem, 1rem);
 	}
