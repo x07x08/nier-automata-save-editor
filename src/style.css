@@ -410,23 +410,33 @@ header {
 	margin: 0px;
 	margin-top: var(--global-spacing) !important;
 	margin-bottom: var(--global-spacing) !important;
+	/*
+	Flashing makes the entire button invisble on Firefox.
+	It does not seem to automatically add background-color as a layer.
+	*/
 	background: linear-gradient(to right,
 			var(--unfocused-color) 0%,
 			var(--unfocused-color) 50%,
 			var(--text-color) 0%,
-			var(--text-color) 50%);
+			var(--text-color) 50%),
+			var(--flash-color);
 	background-size: 200% 200%;
 	outline: none;
 	border: none;
 	box-shadow: none;
 	transition: var(--animation-duration);
-	background-color: var(--flash-color);
+	/* Unsure if removing this will break anything else */
+	/*background-color: var(--flash-color);*/
 }
 
 .hoverable-content {
 	pointer-events: none;
 	transition: var(--animation-duration);
 	padding-right: calc(var(--global-spacing) * 0.5);
+}
+
+.hoverable:not(:has(.icon)) .hoverable-content {
+	padding-left: calc(var(--global-spacing) * 0.5);
 }
 
 .hoverable>.icon {
